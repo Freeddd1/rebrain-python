@@ -23,34 +23,27 @@ for log in raw_logs:
     }
     parsed_logs.append(temp_dict)
 
-times = list(time['time'] for time in parsed_logs)
-print(times)
+print([log['time'] for log in parsed_logs])
 
-date_parsed_logs = []
 
-for logs in parsed_logs:
-    temp_dict = {
-        'time': logs['time'][7:],
-        'date': logs['time'][:6],
-        'pc_name': logs['pc_name'],
-        'service_name': logs['service_name'],
-        'message': logs['message']
-    }
-    date_parsed_logs.append(temp_dict)
+for log in parsed_logs:
+    date_part, time_part = log['time'].rsplit(' ', 1)
+    log['date'] = date_part
+    log['time'] = time_part
 
-for log_dict in date_parsed_logs:
-    print(log_dict['time'])
+
+print([log['time'] for log in parsed_logs])
 
 print([
     i.get('message')
-    for i in date_parsed_logs
+    for i in parsed_logs
     if i.get('pc_name') == 'PC0078'
 ])
 
-dict_keys_number = {}
 
-for i, log in enumerate(date_parsed_logs):
-    key = i + 100
-    dict_keys_number[key] = log
+dict_keys_number = {
+    i: log
+    for i, log in enumerate(parsed_logs, start=100)
+}
 
 print(dict_keys_number[104])
